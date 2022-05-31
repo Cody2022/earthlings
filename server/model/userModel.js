@@ -5,7 +5,7 @@ const bcrypt = require("bcrypt");
 const userSchema = new mongoose.Schema({
   email: { type: String, required: true, unique: true },
   password: { type: String, required: true },
-  isUser: { type: Boolean, defualt: false },
+  isNewcomer: { type: Boolean, defualt: false },
   isAdmin: { type: Boolean, defualt: false },
   isVolunteer: { type: Boolean, defualt: false },
   createdAt: { type: Date, default: new Date() },
@@ -28,7 +28,7 @@ const findByEmail = async (userName) => {
     let FoundByEmail = await User.findOne(userName);
     return FoundByEmail;
   } catch (error) {
-    console.log("Cannot find the username in database");
+    console.log("Cannot find the email in database");
   }
 };
 
@@ -37,6 +37,20 @@ const findUserById = async (id) => {
   return user;
 };
 
+const updateByEmail = async (email, newUserData) => {
+    if (newUserData.password) {
+        const hashedPassword = bcrypt.hashSync(newUserData.password, (saltRounds = 10));
+        let updatedUser = await User.findOneAndUpdate(email, {...newUserData, password: hashedPassword}, {
+        new: true,
+        });
+        return updatedUser;
+    } else {
+        let updatedUser = await User.findOneAndUpdate(email, newUserData, {
+        new: true,
+        });
+        return updatedUser;
+    }
+};
 //   Update exiting user data
 const updateUserById = async (id, newUserData) => {
   let updatedUser = await User.findByIdAndUpdate(id, newUserData, {
@@ -54,6 +68,7 @@ const deleteUserById = async (id) => {
 module.exports = {
   createUser,
   findByEmail,
+  updateByEmail,
   findUserById,
   updateUserById,
   deleteUserById,
