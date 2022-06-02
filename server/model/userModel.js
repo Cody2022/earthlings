@@ -51,6 +51,11 @@ const updateByEmail = async (email, newUserData) => {
         return updatedUser;
     }
 };
+
+const getAllUsers = async (filter) => {
+  const users = await User.find(filter);
+  return users;
+};
 //   Update exiting user data
 const updateUserById = async (id, newUserData) => {
   let updatedUser = await User.findByIdAndUpdate(id, newUserData, {
@@ -69,6 +74,7 @@ module.exports = {
   createUser,
   findByEmail,
   updateByEmail,
+  getAllUsers,
   findUserById,
   updateUserById,
   deleteUserById,

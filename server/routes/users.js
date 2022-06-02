@@ -4,7 +4,7 @@ const router = express.Router();
 const debug = require("debug")("server:users");
 const bcrypt = require("bcrypt");
 
-const { createUser, findByEmail, updateByEmail } = require("../model/userModel");
+const { createUser, findByEmail, updateByEmail,getAllUsers } = require("../model/userModel");
 
 /* GET users listing. */
 router.get("/", function (req, res) {
@@ -81,5 +81,32 @@ router.post("/login", async (req,res)=>{
     }
   }
 })
+
+router.get("/get/:email", async(req, res)=>{
+  const email=req.params.email;
+  try{
+    let userFound=await findByEmail({ email: email })
+    if (userFound) {
+     res.send(userFound)
+  }
+ }catch(err){
+  debug(`failed to find user with email: ${email}`);
+  debug(err.message);
+  res.status(500).send(`account of ${email} cannot be found`);
+ }
+})
+
+router.get("/getnewcomers", async(req, res)=>{
+    let filter={isNewcomer:true}
+    let newcomers=await getAllUsers(filter);
+    res.send(newcomers);
+})
+
+router.get("/getvolunteers", async(req, res)=>{
+  let filter={isVolunteer:true}
+  let volunteers=await getAllUsers(filter);
+  res.send(volunteers);
+})
+
 
 module.exports = router;
