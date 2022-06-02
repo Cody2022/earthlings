@@ -1,4 +1,4 @@
-const { Schema } = require("mongoose");
+debug = require("debug")("server:userModel");
 const mongoose = require("./mongoose");
 const bcrypt = require("bcrypt");
 
@@ -23,12 +23,12 @@ const createUser = async (newUserData) => {
   return newUser;
 };
 
-const findByEmail = async (userName) => {
+const findByEmail = async (email) => {
   try {
-    let FoundByEmail = await User.findOne(userName);
+    let FoundByEmail = await User.findOne(email);
     return FoundByEmail;
   } catch (error) {
-    console.log("Cannot find the email in database");
+    debug("Cannot find the email in database");
   }
 };
 
@@ -40,13 +40,13 @@ const findUserById = async (id) => {
 const updateByEmail = async (email, newUserData) => {
     if (newUserData.password) {
         const hashedPassword = bcrypt.hashSync(newUserData.password, (saltRounds = 10));
-        let updatedUser = await User.findOneAndUpdate(email, {...newUserData, password: hashedPassword}, {
+        let updatedUser = await User.findOneAndUpdate({email: email}, {...newUserData, password: hashedPassword}, {
         new: true,
         });
         return updatedUser;
     } else {
-        let updatedUser = await User.findOneAndUpdate(email, newUserData, {
-        new: true,
+        let updatedUser = await User.findOneAndUpdate({email: email}, newUserData, {
+        new: true
         });
         return updatedUser;
     }
