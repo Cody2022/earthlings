@@ -52,6 +52,7 @@ const updateByEmail = async (email, newUserData) => {
     }
 };
 
+// get all newcomers or volunteers based on the filter
 const getAllUsers = async (filter) => {
   const users = await User.find(filter);
   return users;
