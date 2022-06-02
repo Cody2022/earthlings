@@ -1,16 +1,10 @@
 require("dotenv").config();
 const express = require("express");
-const { get } = require("mongoose");
 const router = express.Router();
-var debug = require("debug")("server:users");
-const bcrypt = require("bcrypt")
+const debug = require("debug")("server:users");
+const bcrypt = require("bcrypt");
 
-const {
-  createUser,
-  findByEmail,
-  updateByEmail,
-  getAllUsers,
-} = require("../model/userModel");
+const { createUser, findByEmail, updateByEmail, getAllUsers, deleteUser } = require("../model/userModel");
 
 /* GET users listing. */
 router.get("/", function (req, res) {
@@ -119,6 +113,68 @@ router.post("/login", async (req,res)=>{
   }
 })
 
+router.post("/login", async (req,res)=>{
+  const email = req.body.email;
+  const password = req.body.password;
+  if (email === undefined || password === undefined) {
+    return res.send({
+      status: "noInput",
+      id: email,
+      message: "Enter email and password please",
+    });
+  }
+  const userInfo = await findByEmail({ email: email });
+  if (userInfo === null) {
+    res.send({
+      status: "notSignup",
+      id: email,
+      message: "New user, Signup first please",
+    });
+  } else {
+    const result = await bcrypt.compare(password, userInfo.password);
+    if (result === true) {
+      res.send(userInfo);
+    } else {
+      res.send({
+        status: "failed",
+        id: email,
+        message: "Wrong email or password",
+      });
+    }
+  }
+})
+
+router.get("/get/:email", async(req, res)=>{
+  const email=req.params.email;
+  try{
+    let userFound=await findByEmail({ email: email })
+    if (userFound) {
+     res.send(userFound)
+  }
+ }catch(err){
+  debug(`failed to find user with email: ${email}`);
+  debug(err.message);
+  res.status(500).send(`account of ${email} cannot be found`);
+ }
+})
+
+router.get("/getnewcomers", async(req, res)=>{
+    let filter={isNewcomer:true}
+    let newcomers=await getAllUsers(filter);
+    res.send(newcomers);
+})
+
+router.get("/getvolunteers", async(req, res)=>{
+  let filter={isVolunteer:true}
+  let volunteers=await getAllUsers(filter);
+  res.send(volunteers);
+})
+
+router.put("/delete", async(req,res)=>{
+    let email=req.body.email;
+    let deletedUser=deleteUser({email:email})
+    res.send(deletedUser)
+})
 
 
 

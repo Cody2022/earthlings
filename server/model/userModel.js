@@ -41,39 +41,25 @@ const findUserById = async (id) => {
 };
 
 const updateByEmail = async (email, newUserData) => {
-  console.log("userModel.js email", email);
-  if (newUserData.password) {
-    const hashedPassword = bcrypt.hashSync(
-      newUserData.password,
-      (saltRounds = 10)
-    );
-    let updatedUser = await User.findOneAndUpdate(
-      { email: email },
-      { ...newUserData, password: hashedPassword },
-      {
+    if (newUserData.password) {
+        const hashedPassword = bcrypt.hashSync(newUserData.password, (saltRounds = 10));
+        let updatedUser = await User.findOneAndUpdate({email: email}, {...newUserData, password: hashedPassword}, {
         new: true,
-      }
-    );
-    return updatedUser;
-  } else {
-    let updatedUser = await User.findOneAndUpdate(
-      { email: email },
-      newUserData,
-      {
-        new: true,
-        upsert: true,
-      }
-    );
-    return updatedUser;
-  }
+        });
+        return updatedUser;
+    } else {
+        let updatedUser = await User.findOneAndUpdate({email: email}, newUserData, {
+        new: true
+        });
+        return updatedUser;
+    }
 };
 
-// get all newcomers or volunteers based on filter
+// get all newcomers or volunteers based on the filter
 const getAllUsers = async (filter) => {
   const users = await User.find(filter);
   return users;
 };
-
 //   Update exiting user data
 const updateUserById = async (id, newUserData) => {
   let updatedUser = await User.findByIdAndUpdate(id, newUserData, {
@@ -88,6 +74,11 @@ const deleteUserById = async (id) => {
   return deletedUser;
 };
 
+const deleteUser = async (email) => {
+  let deletedUser = await User.deleteOne(email);
+  return deletedUser;
+};
+
 module.exports = {
   createUser,
   findByEmail,
@@ -95,5 +86,6 @@ module.exports = {
   getAllUsers,
   findUserById,
   updateUserById,
+  deleteUser,
   deleteUserById,
 };
