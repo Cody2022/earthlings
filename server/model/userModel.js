@@ -1,11 +1,11 @@
-const { Schema } = require("mongoose");
+debug = require("debug")("server:userModel");
 const mongoose = require("./mongoose");
 const bcrypt = require("bcrypt");
 
 const userSchema = new mongoose.Schema({
   email: { type: String, required: true, unique: true },
   password: { type: String, required: true },
-  isNewComer: { type: Boolean, defualt: false },
+  isNewcomer: { type: Boolean, defualt: false },
   isAdmin: { type: Boolean, defualt: false },
   isVolunteer: { type: Boolean, defualt: false },
   createdAt: { type: Date, default: new Date() },
@@ -23,12 +23,12 @@ const createUser = async (newUserData) => {
   return newUser;
 };
 
-const findByEmail = async (userName) => {
+const findByEmail = async (email) => {
   try {
-    let FoundByEmail = await User.findOne(userName);
+    let FoundByEmail = await User.findOne(email);
     return FoundByEmail;
   } catch (error) {
-    console.log("Cannot find the username in database");
+    debug("Cannot find the email in database");
   }
 };
 // const findByEmail = async (email) => {
@@ -53,13 +53,14 @@ const updateByEmail = async (email, newUserData) => {
       new: true, upsert: true
       });
       return updatedUser;
-  // }
+   }
 };
 
 const findUserById = async (id) => {
   let user = await User.findById(id);
   return user;
 };
+
 
 //   Update exiting user data
 const updateUserById = async (id, newUserData) => {
@@ -78,6 +79,7 @@ const deleteUserById = async (id) => {
 module.exports = {
   createUser,
   findByEmail,
+  updateByEmail,
   findUserById,
   updateUserById,
   deleteUserById,

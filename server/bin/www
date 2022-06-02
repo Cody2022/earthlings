@@ -3,9 +3,8 @@
 /**
  * Module dependencies.
  */
-
 var app = require('../app');
-var debug = require('debug')('server:server');
+var debug = require('debug')('server:www');
 var http = require('http');
 
 /**
