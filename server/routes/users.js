@@ -1,7 +1,8 @@
 require("dotenv").config();
-var express = require("express");
-var router = express.Router();
-var debug = require("debug")("server:users");
+const express = require("express");
+const router = express.Router();
+const debug = require("debug")("server:users");
+const bcrypt = require("bcrypt");
 
 const { createUser, findByEmail, updateByEmail } = require("../model/userModel");
 
@@ -50,5 +51,35 @@ router.put("/update/:email", async(req, res)=>{
  }
 })
 
+router.post("/login", async (req,res)=>{
+  const email = req.body.email;
+  const password = req.body.password;
+  if (email === undefined || password === undefined) {
+    return res.send({
+      status: "noInput",
+      id: email,
+      message: "Enter email and password please",
+    });
+  }
+  const userInfo = await findByEmail({ email: email });
+  if (userInfo === null) {
+    res.send({
+      status: "notSignup",
+      id: email,
+      message: "New user, Signup first please",
+    });
+  } else {
+    const result = await bcrypt.compare(password, userInfo.password);
+    if (result === true) {
+      res.send(userInfo);
+    } else {
+      res.send({
+        status: "failed",
+        id: email,
+        message: "Wrong email or password",
+      });
+    }
+  }
+})
 
 module.exports = router;
