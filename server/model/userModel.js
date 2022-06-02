@@ -71,6 +71,11 @@ const deleteUserById = async (id) => {
   return deletedUser;
 };
 
+const deleteUser = async (email) => {
+  let deletedUser = await User.deleteOne(email);
+  return deletedUser;
+};
+
 module.exports = {
   createUser,
   findByEmail,
@@ -78,5 +83,6 @@ module.exports = {
   getAllUsers,
   findUserById,
   updateUserById,
+  deleteUser,
   deleteUserById,
 };

@@ -4,7 +4,7 @@ const router = express.Router();
 const debug = require("debug")("server:users");
 const bcrypt = require("bcrypt");
 
-const { createUser, findByEmail, updateByEmail,getAllUsers } = require("../model/userModel");
+const { createUser, findByEmail, updateByEmail, getAllUsers, deleteUser } = require("../model/userModel");
 
 /* GET users listing. */
 router.get("/", function (req, res) {
@@ -108,5 +108,10 @@ router.get("/getvolunteers", async(req, res)=>{
   res.send(volunteers);
 })
 
+router.put("/delete", async(req,res)=>{
+    let email=req.body.email;
+    let deletedUser=deleteUser({email:email})
+    res.send(deletedUser)
+})
 
 module.exports = router;
