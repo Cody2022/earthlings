@@ -6,11 +6,11 @@ const bcrypt = require("bcrypt");
 
 const { createUser, findByEmail, updateByEmail, getAllUsers, deleteUser } = require("../model/userModel");
 
-/* GET users listing. */
 router.get("/", function (req, res) {
   res.send("Welcome earthlings to project 3!!");
 });
 
+/* User Sign up*/
 router.post("/signup", async (req, res) => {
   const { email, password } = req.body;
 
@@ -36,6 +36,22 @@ router.post("/signup", async (req, res) => {
   }
 });
 
+/*Get user by email*/
+router.get("/get/:email", async(req, res)=>{
+  const email=req.params.email;
+  try{
+    let userFound=await findByEmail({ email: email })
+    if (userFound) {
+     res.send(userFound)
+  }
+ }catch(err){
+  debug(`failed to find user with email: ${email}`);
+  debug(err.message);
+  res.status(500).send(`account of ${email} cannot be found`);
+ }
+})
+
+/*Update user profile*/
 router.put("/update/:email", async (req, res) => {
   const email = req.params.email;
   const updateData = req.body;
@@ -51,130 +67,66 @@ router.put("/update/:email", async (req, res) => {
   }
 });
 
-// getUserByEmail
-router.get("/get/:email", async (req, res) => {
-  const email = req.params.email;
-
-  debug(`:email is (${email})`);
-  try {
-    let userFound = await findByEmail({email: email});
-    if (userFound) {
-      res.send (userFound)
-    }
-      } catch (err) {
-        debug(`failed to find user with email: ${email}`);
-        debug(err.message);
-        res.status(500).send(`account of ${email} cannot be found`);
-  }
-});
-
-// get newcomers
+/*Get all newcomers*/
 router.get("/getnewcomers", async(req, res)=>{
   let filter={isNewcomer:true}
   let newcomers=await getAllUsers(filter);
   res.send(newcomers);
 })
 
-// get Volunteers
+/*Get all volunteers*/
 router.get("/getvolunteers", async(req, res)=>{
   let filter={isVolunteer:true}
   let volunteers=await getAllUsers(filter);
   res.send(volunteers);
 })
 
-router.post("/login", async (req,res)=>{
-  const email = req.body.email;
-  const password = req.body.password;
-  if (email === undefined || password === undefined) {
-    return res.send({
-      status: "noInput",
-      id: email,
-      message: "Enter email and password please",
-    });
-  }
-  const userInfo = await findByEmail({ email: email });
-  if (userInfo === null) {
-    res.send({
-      status: "notSignup",
-      id: email,
-      message: "New user, Signup first please",
-    });
-  } else {
-    const result = await bcrypt.compare(password, userInfo.password);
-    if (result === true) {
-      res.send(userInfo);
-    } else {
-      res.send({
-        status: "failed",
-        id: email,
-        message: "Wrong email or password",
-      });
-    }
-  }
-})
-
-router.post("/login", async (req,res)=>{
-  const email = req.body.email;
-  const password = req.body.password;
-  if (email === undefined || password === undefined) {
-    return res.send({
-      status: "noInput",
-      id: email,
-      message: "Enter email and password please",
-    });
-  }
-  const userInfo = await findByEmail({ email: email });
-  if (userInfo === null) {
-    res.send({
-      status: "notSignup",
-      id: email,
-      message: "New user, Signup first please",
-    });
-  } else {
-    const result = await bcrypt.compare(password, userInfo.password);
-    if (result === true) {
-      res.send(userInfo);
-    } else {
-      res.send({
-        status: "failed",
-        id: email,
-        message: "Wrong email or password",
-      });
-    }
-  }
-})
-
-router.get("/get/:email", async(req, res)=>{
-  const email=req.params.email;
-  try{
-    let userFound=await findByEmail({ email: email })
-    if (userFound) {
-     res.send(userFound)
-  }
- }catch(err){
-  debug(`failed to find user with email: ${email}`);
-  debug(err.message);
-  res.status(500).send(`account of ${email} cannot be found`);
- }
-})
-
-router.get("/getnewcomers", async(req, res)=>{
-    let filter={isNewcomer:true}
-    let newcomers=await getAllUsers(filter);
-    res.send(newcomers);
-})
-
-router.get("/getvolunteers", async(req, res)=>{
-  let filter={isVolunteer:true}
-  let volunteers=await getAllUsers(filter);
-  res.send(volunteers);
-})
-
+/*Delete user*/
 router.put("/delete", async(req,res)=>{
     let email=req.body.email;
     let deletedUser=deleteUser({email:email})
     res.send(deletedUser)
 })
+
+/*Login*/
+router.post("/login", async (req,res)=>{
+  const email = req.body.email;
+  const password = req.body.password;
+  if (email === undefined || password === undefined) {
+    return res.send({
+      status: "noInput",
+      id: email,
+      message: "Enter email and password please",
+    });
+  }
+  const userInfo = await findByEmail({ email: email });
+  if (userInfo === null) {
+    res.send({
+      status: "notSignup",
+      id: email,
+      message: "New user, Signup first please",
+    });
+  } else {
+    const result = await bcrypt.compare(password, userInfo.password);
+    if (result === true) {
+      res.send(userInfo);
+    } else {
+      res.send({
+        status: "failed",
+        id: email,
+        message: "Wrong email or password",
+      });
+    }
+  }
+})
+
+
+
+
+
+
+
+
 
 
 
