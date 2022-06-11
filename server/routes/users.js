@@ -52,9 +52,8 @@ router.get("/get/:email", async(req, res)=>{
 })
 
 /*Update user profile*/
-router.put("/update/:email", async (req, res) => {
-  const email = req.params.email;
-  const updateData = req.body;
+router.put("/update/", async (req, res) => {
+  const {email, ...updateData}=req.body;
   try {
     let updatedUser = await updateByEmail(email, updateData);
     if (updatedUser) {

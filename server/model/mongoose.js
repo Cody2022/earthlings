@@ -1,7 +1,7 @@
 const mongoose = require('mongoose')
 
 
-let connectionString = "mongodb://localhost:27017/earthlings";
+let connectionString = process.env.MONGODB;
 
 mongoose.connect(connectionString,()=>{
     console.log("connected to mongoose")
