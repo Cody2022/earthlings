@@ -6,12 +6,20 @@ const { query } = require("express");
 const userSchema = new mongoose.Schema({
   email: { type: String, required: true, unique: true },
   password: { type: String, required: true },
-  isNewcomer: { type: Boolean, defualt: false },
-  isAdmin: { type: Boolean, defualt: false },
-  isVolunteer: { type: Boolean, defualt: false },
+  firstName: { type: String},
+  lastName: { type: String},
+  age:{type: String},
+  gender:{type: String},
+  languages: {type: Array},
+  educationLevel:{type: String},
+  isNewcomer: { type: Boolean },
+  isAdmin: { type: Boolean },
+  isVolunteer: { type: Boolean},
+  address:{type: String},
+  city:{type: String},
+  province:{type: String},
   createdAt: { type: Date, default: new Date() },
   updatedAt: { type: Date, default: new Date() },
-  name: { type: String},
 });
 
 const User = mongoose.model("User", userSchema);
