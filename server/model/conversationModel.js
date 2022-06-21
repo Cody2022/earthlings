@@ -2,10 +2,10 @@ const mongoose = require("mongoose")
 //Create an array that will store the members ids of the conversation
 const conversationSchema = new mongoose.Schema({
     members: {
-        type: [{
+        type: {
             senderId: String,
-            recieverId: [String],
-        }],
+            recieverId: Array,
+        },
     }
 }, { timestamps: true});
 
