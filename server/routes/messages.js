@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const { createMessage } = require('../model/messageModel')
+const { createMessage, getMessages } = require('../model/messageModel')
 
 //router that will create a message
 router.post("/", async (req, res) => {
@@ -12,6 +12,18 @@ router.post("/", async (req, res) => {
     res.json(newMessage);
   } catch (err) {
     res.status(500).json(err.message);
+  }
+});
+
+//router that will get messages
+router.get("/:convo_id", async (req, res) => {
+  const id = req.params.convo_id
+  try {
+    const findMessages = await getMessages(id)
+    console.log(`Retrieved messages with convo if of: ${findMessages}`)
+    res.send(findMessages)
+  } catch (err) {
+    res.status.send(err.message)
   }
 });
 
