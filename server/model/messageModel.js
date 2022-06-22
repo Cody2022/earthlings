@@ -23,4 +23,10 @@ const createMessage = async (message) => {
   return newMessage;
 };
 
-module.exports = { createMessage };
+//Get messages by conversationID
+const getMessages = async (conversationId) => {
+  const findMessages = await messageModel.find({ conversationId: conversationId })
+  return findMessages
+}
+
+module.exports = { createMessage, getMessages };
