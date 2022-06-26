@@ -49,6 +49,12 @@ const findUserById = async (id) => {
   return user;
 };
 
+//Find user by first name
+const findUsersFirstName = async (email) => {
+  const locateFirstName = User.findOne({ email: email });
+  return locateFirstName
+};
+
 const updateByEmail = async (email, newUserData) => {
     if (newUserData.password) {
         const hashedPassword = bcrypt.hashSync(newUserData.password, (saltRounds = 10));
@@ -91,6 +97,7 @@ const deleteUser = async (email) => {
 module.exports = {
   createUser,
   findByEmail,
+  findUsersFirstName,
   updateByEmail,
   getAllUsers,
   findUserById,
