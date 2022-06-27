@@ -23,7 +23,7 @@ router.get("/:convo_id", async (req, res) => {
     console.log(`Retrieved messages with convo if of: ${findMessages}`)
     res.send(findMessages)
   } catch (err) {
-    res.status.send(err.message)
+    res.status(500).send(err.message)
   }
 });
 
