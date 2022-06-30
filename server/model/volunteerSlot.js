@@ -1,15 +1,30 @@
 debug = require("debug")("server:userModel");
 const mongoose = require("./mongoose");
-const bcrypt = require("bcrypt");
-const { query } = require("express");
 
-const slotSchema = {
-  task: String,
-  category: String,
-  date: date
-}
+const Schema = mongoose.Schema;
 
-const volunteerSlot = mongoose.model("slot", slotSchema);
+const slotSchema = new Schema ({
+  task: {
+    type: String, 
+    required: true
+  },
+
+  category: {
+    type: String, 
+    required: true
+  },
+
+  date: {
+    type: Date, 
+    required: true
+  }
+    
+}, {
+  timestamps: true,
+
+});
+
+const volunteerSlot = mongoose.model("volunteerSlot", slotSchema);
 
 module.exports = {
   volunteerSlot
