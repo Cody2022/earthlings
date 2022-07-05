@@ -6,6 +6,7 @@ const path = require("path");
 const cookieParser = require("cookie-parser");
 // const logger = require("morgan");
 
+const donationRouter = require("./routes/donations")
 const usersRouter = require("./routes/users");
 const membersConversationRoute = require("./routes/conversations");
 const messagesRoute = require("./routes/messages");
@@ -34,6 +35,7 @@ app.use(express.json());
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, "public")));
 
+app.use("/donations", donationRouter);
 app.use("/", usersRouter);
 app.use("/conversation", membersConversationRoute);
 app.use("/messages", messagesRoute);
