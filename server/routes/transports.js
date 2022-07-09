@@ -58,7 +58,7 @@ router.get("/getall", async(req, res)=>{
 })
 
 /*Get all transports by date*/
-router.get("/getbydate", async(req, res)=>{
+router.post("/getbydate", async(req, res)=>{
   const {date}=req.body;
   try{
     let transports=await getByDate(date);
@@ -70,7 +70,7 @@ router.get("/getbydate", async(req, res)=>{
 })
 
 /*Get all transports by startTime*/
-router.get("/getbystarttime", async(req, res)=>{
+router.post("/getbystarttime", async(req, res)=>{
   const {startTime}=req.body;
   try{
     let transports=await getByStartTime(startTime);
@@ -84,12 +84,12 @@ router.get("/getbystarttime", async(req, res)=>{
 /**Delete transport info based on email and Time */
 
 router.put("/delete", async(req, res)=>{
-  const {email, startTime, endTime}=req.body;
+  const {email, startTime}=req.body;
   try{
-    let deletedTransport=deleteTransportByEmailAndTime(email, startTime, endTime);
-    res.send(`Transport info with ${email} and startTime ${startTime}, endTime ${endTime} has been deleted`)
+    let deletedTransport=deleteTransportByEmailAndTime(email, startTime);
+    res.status(200).send(deletedTransport)
   }catch(error){
-    debug(error.message)
+    debug(error)
     res.status(500).send(`Failed to delete transport info by email and startTime`);
   }
 })
