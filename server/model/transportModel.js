@@ -53,11 +53,11 @@ const getByDate = async (date) => {
   return transportInfo;
 };
 
-// get all transport availabilities on given date
+// get all transport availabilities on given stattime
 const getByStartTime = async (startTime) => {
   const transportInfo = await Transport.find({
     startTime:{
-      $lt: new Date(startTime)
+      $lte: new Date(startTime)
     },
     endTime:{
       $gte: new Date(startTime)
@@ -66,11 +66,10 @@ const getByStartTime = async (startTime) => {
   return transportInfo;
 };
 
-const deleteTransportByEmailAndTime = async (email, startTime, endTime) => {
+const deleteTransportByEmailAndTime = async (email, startTime) => {
   let deletedTransport = await Transport.deleteOne({
     email: email,
     startTime: { $eq: new Date (startTime) },
-    endTime: { $eq: new Date (endTime) },
   });
   return deletedTransport;
 };
