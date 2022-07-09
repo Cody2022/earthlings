@@ -4,7 +4,7 @@ const router = express.Router();
 const debug = require("debug")("server:users");
 const bcrypt = require("bcrypt");
 
-const { createUser, findByEmail, updateByEmail, getAllUsers, deleteUser } = require("../model/userModel");
+const { createUser, findByEmail, findUsersFirstName, updateByEmail, getAllUsers, deleteUser } = require("../model/userModel");
 
 router.get("/", function (req, res) {
   res.send("Welcome earthlings to project 3!!");
@@ -50,6 +50,18 @@ router.get("/get/:email", async(req, res)=>{
   res.status(500).send(`account of ${email} cannot be found`);
  }
 })
+
+//Get users firstName by querying out 
+router.get("/name", async (req, res) => {
+  console.log(req.query);
+  const firstName = req.query.email;
+  try {
+    const findUserName = await findUsersFirstName(firstName);
+    res.send(findUserName);
+  } catch (err) {
+    res.status(500).send(err.message)
+  }
+});
 
 /*Update user profile*/
 router.put("/update/", async (req, res) => {

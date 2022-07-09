@@ -2,10 +2,7 @@ const mongoose = require("mongoose")
 //Create an array that will store the members ids of the conversation
 const conversationSchema = new mongoose.Schema({
     members: {
-        type: [{
-            senderId: String,
-            recieverId: [String],
-        }],
+        type: Array,   
     }
 }, { timestamps: true});
 
@@ -17,5 +14,11 @@ const createMembers = async (members) => {
     return newMembers
 };
 
-module.exports = { createMembers }
+//Find a members conversations by id
+const findConversation = async (_id) => {
+    const getConversation = await conversationModel.find({ members: { $in: _id } });
+    return getConversation
+}
+
+module.exports = { createMembers, findConversation }
 
