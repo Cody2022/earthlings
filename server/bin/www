@@ -19,15 +19,58 @@ app.set('port', port);
  */
 
 var server = http.createServer(app);
-const { Server } = require("socket.io");
+// const { Server } = require("socket.io");
 
-const io = new Server(server, {
+const io = require("socket.io")(server, {
   cors: {
     origin: "*",
-    methods: ["GET", "POST"],
-  },
+  }
 });
 
+let users = [];
+
+//Add user to array
+const addUser = (userId, socketId) => {
+  !users.some((user) => user.userId === userId) &&
+    users.push({ userId, socketId });
+};
+
+//Remove user from array
+const removeUser = (socketId) => {
+  users = users.filter((user) => user.socketId !== socketId);
+};
+
+//Find users from array
+const getUser = (userId) => {
+  return users.find((user) => user.userId === userId);
+};
+//Connect the socket
+io.on("connection", (socket) => {
+  //When connected
+  console.log("A user connected");
+  //take userId and socketId after every connection
+  socket.on("addUser", (userId) => {
+    addUser(userId, socket.id);
+    io.emit("getUsers", users);
+  });
+
+  //Send and get message
+  socket.on("sendMessage", ({ senderId, receiverId, message }) => {
+    const user = getUser(receiverId);
+    //send message to one client with socketID 
+    io.to(user.socketId).emit("getMessage", {
+      senderId,
+      message,
+    });
+  });
+
+  //When disconnect
+  socket.on("disconnect", () => {
+    console.log("A user disconnected");
+    removeUser(socket.Id);
+    io.emit("getUsers", users);
+  });
+});
 /**
  * Listen on provided port, on all network interfaces.
  */
@@ -35,32 +78,6 @@ const io = new Server(server, {
 server.listen(port);
 server.on('error', onError);
 server.on('listening', onListening);
-
-
-io.on("connection", (socket) => {
-  console.log(`user connected with: ${socket.id}`);
-
-  //See what the error is
-  socket.on("connect_error", (err) => {
-    console.log(`connect_error due to err.message`);
-  });
-
-  //Allow socket.io to join a room
-  socket.on("join-room", (data) => {
-    socket.join(data);
-    console.log(`User with ID: ${socket.id} joined room: ${data}`);
-  });
-
-  //Create a socket.io event to send the message to the server
-  socket.on("send-message", (data) => {
-    console.log(`Sending message data`);
-    socket.timeout(data.room).emit("receive-message", data);
-  });
-
-  socket.on("disconnect", () => {
-    console.log(`User disconnected with id: ${socket.id}`);
-  });
-});
 
 /**
  * Normalize a port into a number, string, or false.
