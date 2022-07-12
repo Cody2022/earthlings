@@ -1,8 +1,8 @@
 const express = require("express");
 const router = express.Router();
-const Request = require("../model/requestForm")
+const Request = require("../model/requestModel")
 
-router.route("/form").post((req, res) => {
+router.route("/").post((req, res) => {
     const title = req.body.title;
     const content = req.body.content;
     const newRequest = new Request({
