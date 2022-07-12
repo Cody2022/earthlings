@@ -25,7 +25,6 @@ app.use(function (err, req, res, next) {
   res.json({ error: err });
 });
 
-
 app.use(cors());
 
 // view engine setup
