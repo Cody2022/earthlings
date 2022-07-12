@@ -6,7 +6,9 @@ const path = require("path");
 const cookieParser = require("cookie-parser");
 // const logger = require("morgan");
 
-const usersRouter = require("./routes/users");
+const usersRoute = require("./routes/users");
+const transportsRoute = require("./routes/transports");
+const donationRouter = require("./routes/donations")
 const membersConversationRoute = require("./routes/conversations");
 const messagesRoute = require("./routes/messages");
 const requestRoute = require("./routes/requestRoute");
@@ -33,7 +35,9 @@ app.use(express.json());
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, "public")));
 
-app.use("/", usersRouter);
+app.use("/", usersRoute);
+app.use("/transport", transportsRoute);
+app.use("/donations", donationRouter);
 app.use("/conversation", membersConversationRoute);
 app.use("/messages", messagesRoute);
 app.use("/request", requestRoute);

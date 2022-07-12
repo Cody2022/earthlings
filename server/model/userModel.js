@@ -1,7 +1,6 @@
 debug = require("debug")("server:userModel");
 const mongoose = require("./mongoose");
 const bcrypt = require("bcrypt");
-const { query } = require("express");
 
 const userSchema = new mongoose.Schema({
   email: { type: String, required: true, unique: true },
@@ -44,6 +43,7 @@ const findByEmail = async (email) => {
     debug("Cannot find the email in database");
   }
 };
+
 const findUserById = async (id) => {
   let user = await User.findById(id);
   return user;
