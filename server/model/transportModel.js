@@ -13,9 +13,12 @@ const transportSchema = new mongoose.Schema({
   address: { type: String },
   city: { type: String },
   province: { type: String },
+  task: { type: String },
+  startTime: { type: Date },
+  endTime: { type: Date },
   createdAt: { type: Date, default: new Date() },
   updatedAt: { type: Date, default: new Date() },
 });
 const Transport = mongoose.model("Transport", transportSchema);
 
-export default Transport;
+module.exports = Transport;
