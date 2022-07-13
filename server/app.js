@@ -13,6 +13,7 @@ const membersConversationRoute = require("./routes/conversations");
 const messagesRoute = require("./routes/messages");
 const requestRoute = require("./routes/requestRoute");
 const scheduleRoute = require("./routes/scheduleRoute");
+const accommodationRoute = require("./routes/accommodations");
 
 const app = express();
 // const server = http.createServer(app);
@@ -41,6 +42,7 @@ app.use("/conversation", membersConversationRoute);
 app.use("/messages", messagesRoute);
 app.use("/request", requestRoute);
 app.use("/schedule", scheduleRoute);
+app.use("/accommodation", accommodationRoute);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {

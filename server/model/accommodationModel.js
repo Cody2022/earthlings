@@ -37,7 +37,7 @@ const updateByEmail = async (email, updateData) => {
 // Find listing by email
 const findByEmail = async (email) => {
   try {
-    let FoundByEmail = await Accommodation.findOne(email);
+    let FoundByEmail = await Accommodation.find(email);
     return FoundByEmail;
   } catch (error) {
     debug("Cannot find the email in database");
