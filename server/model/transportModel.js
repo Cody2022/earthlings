@@ -17,3 +17,5 @@ const transportSchema = new mongoose.Schema({
   updatedAt: { type: Date, default: new Date() },
 });
 const Transport = mongoose.model("Transport", transportSchema);
+
+export default Transport;

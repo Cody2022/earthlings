@@ -37,8 +37,7 @@ const createUser = async (newUserData) => {
 
 const findByEmail = async (email) => {
   try {
-    let FoundByEmail = await User.findOne(email);
-    return FoundByEmail;
+    return await User.findOne(email);
   } catch (error) {
     debug("Cannot find the email in database");
   }
