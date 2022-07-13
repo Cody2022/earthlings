@@ -8,22 +8,21 @@ const cookieParser = require("cookie-parser");
 
 const usersRoute = require("./routes/users");
 const transportsRoute = require("./routes/transports");
-const donationRouter = require("./routes/donations")
+const donationRouter = require("./routes/donations");
 const membersConversationRoute = require("./routes/conversations");
 const messagesRoute = require("./routes/messages");
 const requestRoute = require("./routes/requestRoute");
-const scheduleRoute= require("./routes/scheduleRoute");
+const scheduleRoute = require("./routes/scheduleRoute");
+const accommodationRoute = require("./routes/accommodations");
 
 const app = express();
 // const server = http.createServer(app);
-
 
 app.use(function (err, req, res, next) {
   console.error(err);
   res.status(err.status || 500);
   res.json({ error: err });
 });
-
 
 app.use(cors());
 
@@ -43,7 +42,7 @@ app.use("/conversation", membersConversationRoute);
 app.use("/messages", messagesRoute);
 app.use("/request", requestRoute);
 app.use("/schedule", scheduleRoute);
-
+app.use("/accommodation", accommodationRoute);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {

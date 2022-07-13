@@ -85,6 +85,20 @@ router.get("/getnewcomers", async(req, res)=>{
   res.send(newcomers);
 })
 
+/*Get all volunteers user*/
+router.get("/volunteerusers", async(req, res)=>{
+  let filter={isVolunteer:true}
+  let volunteers=await getAllUsers(filter);
+  res.send(volunteers);
+})
+
+/*Get all newcomer user*/
+router.get("/newcomersusers", async(req, res)=>{
+  let filter={isVolunteer:false}
+  let volunteers=await getAllUsers(filter);
+  res.send(volunteers);
+})
+
 /*Get all volunteers*/
 router.get("/getvolunteers", async(req, res)=>{
   let filter={isVolunteer:true}
