@@ -53,7 +53,7 @@ const getByDate = async (date) => {
   return transportInfo;
 };
 
-// get all transport availabilities on given stattime
+// get all transport availabilities on given starttime
 const getByStartTime = async (startTime) => {
   const transportInfo = await Transport.find({
     startTime:{
