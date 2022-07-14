@@ -3,8 +3,8 @@ const { model } = require("mongoose");
 const mongoose = require("./mongoose");
 
 const scheduleSchema = {
+  task: { type: String, required: true },
   email: { type: String, required: true },
-  title: { type: String, required: true },
   startDate: { type: Date, default: new Date() },
   endDate: { type: Date, default: new Date() },
 };

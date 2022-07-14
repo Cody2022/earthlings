@@ -6,7 +6,7 @@ const transportModel = require("../model/transportModel");
 
 router.route("/").post(async (req, res) => {
   try {
-    const title = req.body.title;
+    const task = req.body.title;
     const email = req.body.email;
     console.log("!!!", req.body);
     const startDate = new Date(req.body.startDate);
@@ -18,7 +18,7 @@ router.route("/").post(async (req, res) => {
     }
 
     const newEvent = new scheduleModel({
-      title,
+      task,
       email,
       startDate,
       endDate,
@@ -33,7 +33,7 @@ router.route("/").post(async (req, res) => {
 /*Get all newEvents*/
 router.get("/:email", async (req, res) => {
   const email = req.params.email;
-  const schedules = await scheduleModel.find({ email: email });
+  const schedules = await scheduleModel.findByEmail({ email: email });
   res.json(schedules);
 });
 
@@ -52,7 +52,7 @@ router.get("/", async (req, res) => {
   }
 
   const distinctVolunteerEmails = await scheduleModel.find({
-    title: { $regex: new RegExp(task, "i") },
+    task: { $regex: new RegExp(task, "i") },
     $or: newcomerSlots.map(({ startTime, endTime }) => ({
       $and: [{ $gte: startTime }, { $lte: endTime }],
     })),
