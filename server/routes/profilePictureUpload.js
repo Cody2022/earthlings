@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const { createImage, getImageById } = require("../model/imageUploadModel");
+const { createImage, getImageByEmail } = require("../model/imageUploadModel");
 
 //Upload a profile picture
 router.post("/uploadpicture", async (req, res) => {
@@ -14,15 +14,16 @@ router.post("/uploadpicture", async (req, res) => {
   }
 });
 
-router.get("/:id", async (req, res) => {
-  const id = req.params.id;
+router.get("/:email", async (req, res) => {
+  const email = req.params.email;
   try {
-    const findImage = await getImageById(id);
+    const findImage = await getImageByEmail(email);
     console.log(`Retrieving image with id of: ${findImage.id}`);
     res.send(findImage);
   } catch (err) {
     console.log(err.message);
   }
 });
+
 
 module.exports = router;

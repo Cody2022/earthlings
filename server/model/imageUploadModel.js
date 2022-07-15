@@ -1,7 +1,8 @@
 const mongoose = require('mongoose');
 
 const imageSchema = mongoose.Schema({
-    profilePic: String 
+  email: { type: String, required: true},
+  profilePic: { type: String }
 })
 
 const image = mongoose.model("Image", imageSchema);
@@ -11,9 +12,9 @@ const createImage = async (pic) => {
   return newImage;
 };
 
-const getImageById = async (_id) => {
-  const viewImage = await image.findById(_id);
+const getImageByEmail = async (email) => {
+  const viewImage = await image.findOne({ email: email });
   return viewImage;
 };
 
-module.exports = { createImage, getImageById }
+module.exports = { createImage, getImageByEmail }
