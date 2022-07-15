@@ -12,6 +12,7 @@ const {
   deleteTransportByEmailAndTime,
   getByStartTime,
   findByEmail,
+  getByLanguage
 } = require("../model/transportModel");
 
 /** create transport form */
@@ -85,6 +86,19 @@ router.post("/getbystarttime", async (req, res) => {
     res.status(500).send(`failed to find transport info by startTime`);
   }
 });
+
+/*Get all transport listings based on Languages*/
+router.post("/getbylanguages", async (req, res) => {
+  const {languages} = req.body;
+  try {
+    let transports = await getByLanguage(languages);
+    res.send(transports);
+  } catch (error) {
+    debug(error.message);
+    res.status(500).send(`failed to find transport info by languages`);
+  }
+});
+
 
 /**Delete transport info based on email and Time */
 
