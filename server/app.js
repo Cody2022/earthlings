@@ -11,7 +11,7 @@ const transportsRoute = require("./routes/transports");
 const donationRouter = require("./routes/donations");
 const membersConversationRoute = require("./routes/conversations");
 const messagesRoute = require("./routes/messages");
-const requestRoute = require("./routes/requestRoute");
+const translateRoute = require("./routes/translateRoute");
 const scheduleRoute = require("./routes/scheduleRoute");
 const accommodationRoute = require("./routes/accommodations");
 
@@ -40,7 +40,7 @@ app.use("/transport", transportsRoute);
 app.use("/donations", donationRouter);
 app.use("/conversation", membersConversationRoute);
 app.use("/messages", messagesRoute);
-app.use("/request", requestRoute);
+app.use("/translate", translateRoute);
 app.use("/schedule", scheduleRoute);
 app.use("/accommodation", accommodationRoute);
 

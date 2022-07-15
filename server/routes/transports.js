@@ -18,14 +18,12 @@ const {
 router.post("/create", async (req, res) => {
   try {
     const transportInfo = req.body;
-    //const task = "transport";
     let date = new Date(transportInfo.date);
     let startTime = new Date(transportInfo.startTime);
     let endTime = new Date(transportInfo.endTime);
     let newTransport = await createTransport({
       ...transportInfo,
       date,
-      //task,
       startTime,
       endTime,
     });

@@ -75,6 +75,7 @@ const deleteTransportByEmailAndTime = async (email, startTime) => {
 };
 
 module.exports = {
+  Transport,
   createTransport,
   getByDate,
   findByEmail,
