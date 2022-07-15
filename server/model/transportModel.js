@@ -53,7 +53,7 @@ const getByDate = async (date) => {
   return transportInfo;
 };
 
-// get all transport availabilities on given starttime
+// get all transport availabilities based on given starttime
 const getByStartTime = async (startTime) => {
   const transportInfo = await Transport.find({
     startTime:{
@@ -74,6 +74,14 @@ const deleteTransportByEmailAndTime = async (email, startTime) => {
   return deletedTransport;
 };
 
+/*Filter all transport availabilities based on Languages*/
+const getByLanguage = async (languages) => {
+  const transportInfo = await Transport.find({
+    languages:{$all:languages}
+  });
+  return transportInfo;
+};
+
 module.exports = {
   Transport,
   createTransport,
@@ -82,5 +90,6 @@ module.exports = {
   updateByEmail,
   getAllTransports,
   deleteTransportByEmailAndTime,
-  getByStartTime
+  getByStartTime,
+  getByLanguage,
 };

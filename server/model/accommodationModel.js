@@ -50,9 +50,9 @@ const getAllListings = async () => {
   return listings;
 };
 
-// Delete an existing listing
-const deleteListing = async (email) => {
-  let deletedListing = await Accommodation.deleteOne(email);
+// Delete Listing By Id
+const deleteListingById = async (id) => {
+  let deletedListing = await Accommodation.findByIdAndDelete(id);
   return deletedListing;
 };
 
@@ -61,5 +61,5 @@ module.exports = {
   updateByEmail,
   findByEmail,
   getAllListings,
-  deleteListing,
+  deleteListingById,
 };
