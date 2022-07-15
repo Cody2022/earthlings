@@ -1,13 +1,12 @@
 const express = require("express");
 const debug = require("debug")("server:routes");
 const router = express.Router();
-
 const {
   createAccomListing,
   updateByEmail,
-  deleteListing,
   findByEmail,
   getAllListings,
+  deleteListingById,
 } = require("../model/accommodationModel");
 
 // POST a new Accommodation Listing
@@ -63,10 +62,11 @@ router.get("/listings", async (req, res) => {
   res.send(listings);
 });
 
-// Delete a listing
-router.put("/delete", async (req, res) => {
-  let email = req.body.email;
-  let deletedListing = deleteListing({ email: email });
+// Delete a listing By ID
+router.put("/delete/:id", async (req, res) => {
+  console.log("reached endpoint")
+  let id = req.params.id;
+  let deletedListing = deleteListingById(id);
   res.send(deletedListing);
 });
 
