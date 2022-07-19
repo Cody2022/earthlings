@@ -1,12 +1,14 @@
 const express = require("express");
 const router = express.Router();
-const scheduleModel = require("../model/scheduleModel");
 const userModel = require("../model/userModel");
-const transportModel = require("../model/transportModel");
+const { Transport } = require("../model/transportModel");
+const Translate = require("../model/translateModel");
+const Accommodation = require("../model/accommodationModel");
+const Schedule = require("../model/scheduleModel");
 
 router.route("/").post(async (req, res) => {
   try {
-    const title = req.body.title;
+    const task = req.body.task;
     const email = req.body.email;
     console.log("!!!", req.body);
     const startDate = new Date(req.body.startDate);
@@ -17,8 +19,8 @@ router.route("/").post(async (req, res) => {
       return res.sendStatus(400);
     }
 
-    const newEvent = new scheduleModel({
-      title,
+    const newEvent = new Schedule({
+      task,
       email,
       startDate,
       endDate,
@@ -30,37 +32,66 @@ router.route("/").post(async (req, res) => {
   }
 });
 
-/*Get all newEvents*/
-router.get("/:email", async (req, res) => {
-  const email = req.params.email;
-  const schedules = await scheduleModel.find({ email: email });
-  res.json(schedules);
-});
-
-router.get("/", async (req, res) => {
+router.get("/overlaps", async (req, res) => {
   const newcomerEmail = req.query.email;
   const task = req.query.task;
 
-  const newcomerSlots = await transportModel.find({
+  const newcomerSlots = await Schedule.find({
     task: { $regex: new RegExp(task, "i") },
     email: newcomerEmail,
-    endTime: { $gt: new Date() },
+    endDate: { $gt: new Date() },
   });
 
   if (!newcomerSlots.length) {
-    return res.json({ volunteers: [] });
+    return res.json({ overlaps: [] });
   }
 
-  const distinctVolunteerEmails = await scheduleModel.find({
-    title: { $regex: new RegExp(task, "i") },
-    $or: newcomerSlots.map(({ startTime, endTime }) => ({
-      $and: [{ $gte: startTime }, { $lte: endTime }],
-    })),
-  }).distinct('email').lean().exec();
+  if (task === "transport") {
+    const query = {
+      $or: newcomerSlots.map(({ startDate, endDate }) => ({
+        $and: [
+          { startTime: { $lte: endDate } },
+          { endTime: { $gte: startDate } },
+        ],
+      })),
+    };
+    const transports = await Transport.find(query);
+    console.log(JSON.stringify(query, undefined, 2));
+    return res.json({ overlaps: transports });
+  }
 
-  res.json({
-    volunteers: distinctVolunteerEmails,
-  });
+  if (task === "translate") {
+    const translates = await Translate.find({
+      $or: newcomerSlots.map(({ startDate, endDate }) => ({
+        $and: [
+          { startTime: { $lte: endDate } },
+          { endTime: { $gte: startDate } },
+        ],
+      })),
+    });
+    return res.json({ overlaps: translates });
+  }
+
+  if (task === "accommodation") {
+    const accomms = await Accommodation.find({
+      $or: newcomerSlots.map(({ startDate, endDate }) => ({
+        $and: [
+          { startDate: { $lte: endDate } },
+          { endDate: { $gte: startDate } },
+        ],
+      })),
+    });
+    return res.json({ overlaps: accomms });
+  }
+
+  res.status(400);
+});
+
+/*Get all newEvents*/
+router.get("/:email", async (req, res) => {
+  const email = req.params.email;
+  const schedules = await Schedule.find({ email: email });
+  res.json(schedules);
 });
 
 module.exports = router;

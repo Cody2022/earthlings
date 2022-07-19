@@ -5,15 +5,16 @@ const cors = require("cors");
 const path = require("path");
 const cookieParser = require("cookie-parser");
 // const logger = require("morgan");
-
+const profilePicture = require("./routes/profilePictureUpload")
 const usersRoute = require("./routes/users");
 const transportsRoute = require("./routes/transports");
 const donationRouter = require("./routes/donations");
 const membersConversationRoute = require("./routes/conversations");
 const messagesRoute = require("./routes/messages");
-const requestRoute = require("./routes/requestRoute");
+const translateRoute = require("./routes/translateRoute");
 const scheduleRoute = require("./routes/scheduleRoute");
 const accommodationRoute = require("./routes/accommodations");
+const bookingRoutes = require("./routes/bookingRoutes");
 
 const app = express();
 // const server = http.createServer(app);
@@ -40,9 +41,11 @@ app.use("/transport", transportsRoute);
 app.use("/donations", donationRouter);
 app.use("/conversation", membersConversationRoute);
 app.use("/messages", messagesRoute);
-app.use("/request", requestRoute);
+app.use("/translate", translateRoute);
 app.use("/schedule", scheduleRoute);
 app.use("/accommodation", accommodationRoute);
+app.use("/bookings", bookingRoutes);
+app.use("/image", profilePicture)
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {

@@ -82,8 +82,8 @@ const getByLanguage = async (languages) => {
   return transportInfo;
 };
 
-
 module.exports = {
+  Transport,
   createTransport,
   getByDate,
   findByEmail,
@@ -91,5 +91,5 @@ module.exports = {
   getAllTransports,
   deleteTransportByEmailAndTime,
   getByStartTime,
-  getByLanguage
+  getByLanguage,
 };
