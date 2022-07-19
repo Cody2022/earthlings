@@ -5,18 +5,19 @@ const bcrypt = require("bcrypt");
 const userSchema = new mongoose.Schema({
   email: { type: String, required: true, unique: true },
   password: { type: String, required: true },
-  firstName: { type: String },
-  lastName: { type: String },
+  firstName: { type: String, required: true },
+  lastName: { type: String, required: true},
   age: { type: String },
   gender: { type: String },
-  languages: { type: Array },
+  languages: { type: Array, required: true},
   educationLevel: { type: String },
-  isNewcomer: { type: Boolean },
+  isNewcomer: { type: Boolean, required: true },
   isAdmin: { type: Boolean },
-  isVolunteer: { type: Boolean },
+  isVolunteer: { type: Boolean, required: true},
   address: { type: String },
   city: { type: String },
   province: { type: String },
+  currentbookings: [],
   createdAt: { type: Date, default: new Date() },
   updatedAt: { type: Date, default: new Date() },
 });
@@ -113,5 +114,5 @@ module.exports = {
   findUserById,
   updateUserById,
   deleteUser,
-  deleteUserById,
+  deleteUserById
 };

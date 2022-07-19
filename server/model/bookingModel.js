@@ -1,15 +1,56 @@
 const mongoose = require("mongoose");
 
-const bookingSchema = new mongoose.Schema({
-  volunteerEmail: { type: String, required: true },
-  newcomerEmail: { type: String, required: true },
-  task: { type: String, required: true },
-  startDate: { type: Date, required: true },
-  endDate: { type: Date, required: true },
+const bookingSchema = new mongoose.Schema(
+  {
+    volunteerEmail: { 
+      type: String, 
+      required: true 
+    },
+    
+    newcomerEmail: { 
+      type: String, 
+      required: true 
+    },
+    
+    task: { 
+      type: String, 
+      // required: true 
+    },
+
+    startDate: { 
+      type: Date, 
+      // required: true 
+    },
+    
+    startTime: { 
+      type: Date, 
+      // required: true 
+    },
+    
+    endTime: { 
+      type: Date,
+      // required: true 
+    },
+
+    bookingInfo: {
+      type: String,
+    },
+    
+    status: {
+      type: String,
+      require: true,
+      default: "booked",
+    },
   },
-    { timestamp: true }
-  );
+  { timestamp: true }
+);
 
-const bookingModel = mongoose.model("Booking", bookingSchema)
+const bookingModel = mongoose.model("bookings", bookingSchema);
 
-module.exports = bookingModel;
+//create Booking
+const createBooking = async (bookingInfo) => {
+  const newBooking = await bookingModel.create(bookingInfo);
+  return newBooking;
+};
+
+module.exports = {bookingModel, createBooking};

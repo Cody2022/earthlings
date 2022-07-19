@@ -1,10 +1,15 @@
 const express = require("express");
 const router = express.Router();
 const scheduleModel = require("../model/scheduleModel");
-const bookingModel = require("../model/bookingModel");
+// const bookingModel = require("../model/bookingModel");
 const { TransportModel } = require("../model/transportModel");
 
-router.route("/").post(async (req, res) => {
+const {
+  bookingModel,
+  createBooking,
+} = require("../model/bookingModel");
+
+router.route("/book").post(async (req, res) => {
   try {
     const newcomerSlotId = req.body.newcomerSlotId;
     const volunteerSlotId = req.body.volunteerSlotId;
@@ -37,5 +42,35 @@ router.get("/:email", async (req, res) => {
   });
   res.json({ bookings });
 });
+
+//post booking
+/** create transport form */
+router.post("/create", async (req, res) => {
+  try {
+    const bookingInfo = req.body;
+    console.log('bookingInfo is', bookingInfo)
+    // let date = new Date(bookingInfo.date);
+    // let startDate = new Date(bookingInfo.startDate);
+    // let startTime = new Date(bookingInfo.startTime);
+    // let endTime = new Date(bookingInfo.endTime);
+
+    let startDate = bookingInfo.startDate;
+    let startTime = bookingInfo.startTime;
+    let endTime = bookingInfo.endTime;
+    let newBooking = await createBooking({
+      ...bookingInfo,
+      startDate,
+      startTime,
+      endTime,
+    });
+    if (newBooking) {
+      res.send(newBooking);
+    }
+  } catch (err) {
+    debug(err.message);
+    res.status(500).send(err.message);
+  }
+});
+
 
 module.exports = router;
