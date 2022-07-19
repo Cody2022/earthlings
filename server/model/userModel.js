@@ -17,6 +17,7 @@ const userSchema = new mongoose.Schema({
   address:{type: String},
   city:{type: String},
   province:{type: String},
+  bio:{type: String},
   createdAt: { type: Date, default: new Date() },
   updatedAt: { type: Date, default: new Date() },
 });
