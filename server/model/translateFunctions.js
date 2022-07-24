@@ -1,6 +1,7 @@
 const mongoose = require("./mongoose");
 const translateModel = require("./translateModel");
 
+//This
 const createTranslate = async (translatesInfo) => {
     const newTranslates = await translateModel.create(translatesInfo);
     return newTranslates;

@@ -4,6 +4,7 @@ const scheduleModel = require("../model/scheduleModel");
 // const bookingModel = require("../model/bookingModel");
 const { TransportModel } = require("../model/transportModel");
 
+//This
 const {
   bookingModel,
   createBooking,
@@ -40,6 +41,7 @@ router.get("/:email", async (req, res) => {
   const bookings = await bookingModel.find({
     $or: [{ volunteerEmail: email }, { newcomerEmail: email }],
   });
+  console.log('bookings', bookings)
   res.json({ bookings });
 });
 
@@ -72,5 +74,18 @@ router.post("/create", async (req, res) => {
   }
 });
 
+// Get all listings
+router.get("/listings", async (req, res) => {
+  let listings = await getAllListings();
+  res.send(listings);
+});
+
+// Delete a listing By ID
+router.put("/delete/:id", async (req, res) => {
+  console.log("reached endpoint")
+  let id = req.params.id;
+  let deletedListing = deleteListingById(id);
+  res.send(deletedListing);
+});
 
 module.exports = router;

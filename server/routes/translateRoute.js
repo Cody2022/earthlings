@@ -2,6 +2,7 @@ const express = require("express");
 const router = express.Router();
 const translateModel = require("../model/translateModel");
 const userModel = require("../model/userModel");
+const moment = require("moment");
 
 // router.use("*", (req, res, next) => {
 //   console.log(`reach the transRouter`);
@@ -9,6 +10,7 @@ const userModel = require("../model/userModel");
 // });
 /** create translate form */
 
+//This
 const {
   createTranslate,
   getByDate,
@@ -22,9 +24,10 @@ const {
 
 router.post("/create", async (req, res) => {
   try {
-    //const task = req.body.title;
+    const task = req.body.task;
+    const name = req.body.name;
     const email = req.body.email;
-    console.log("!!!", req.body);
+    console.log("translate !!!", req.body);
     const fromLanguage = req.body.fromLanguage;
     const toLanguage = req.body.toLanguage;
     const date = new Date(req.body.date);
@@ -32,6 +35,8 @@ router.post("/create", async (req, res) => {
     const endTime = new Date(req.body.endTime);
 
     const newTranslate = new translateModel({
+      task,
+      name,
       email,
       date,
       startTime,
@@ -40,20 +45,55 @@ router.post("/create", async (req, res) => {
       toLanguage,
     });
     newTranslate.save();
+    res.send(newTranslate);
   } catch (ex) {
     console.error(ex);
-    throw ex;
+    res.status(500).send(`failed to create translate!!`);
+    // throw ex;
   }
 });
 
 /*Get all translates*/
 router.get("/getall", async (req, res) => {
   try {
-    const translates = await translateModel.find({})
+    const translates = await translateModel.find({});
     res.send(translates);
   } catch (error) {
     debug(error.message);
-    res.status(500).send(`failed to find all transport info`);
+    res.status(500).send(`failed to find all translate info`);
+  }
+});
+
+/*Get translate information by email*/
+router.get("/get/:email", async (req, res) => {
+  const email = req.params.email;
+  try {
+    let translateFound = await findByEmail({ email: email });
+    if (translateFound) {
+      res.send(translateFound);
+    }
+  } catch (err) {
+    debug(`failed to find translate with email: ${email}`);
+    res.status(500).send(`failed to find translate with email: ${email}`);
+  }
+});
+
+/*Search all translate by date/languages*/
+router.get("/search", async (req, res) => {
+  const when = moment(req.query.when);
+  const toLangs = req.query.toLangs; // array
+  const fromLangs = req.query.fromLangs; // array
+  try {
+    const translates = await translateModel.find({
+      startTime: { $lte: when.endOf('day').toDate() },
+      endTime: { $gte: when.startOf('day').toDate() },
+      fromLanguage: { $in: fromLangs },
+      toLanguage: { $in: toLangs },
+    });
+    res.send({ results: translates });
+  } catch (error) {
+    debug(error.message);
+    res.status(500).send(`failed to search translates`);
   }
 });
 
@@ -65,7 +105,7 @@ router.post("/getbydate", async (req, res) => {
     res.send(translates);
   } catch (error) {
     debug(error.message);
-    res.status(500).send(`failed to find transport by date`);
+    res.status(500).send(`failed to find translate by date`);
   }
 });
 
@@ -77,19 +117,31 @@ router.post("/getbystarttime", async (req, res) => {
     res.send(translates);
   } catch (error) {
     debug(error.message);
-    res.status(500).send(`failed to find transport info by startTime`);
+    res.status(500).send(`failed to find translate info by startTime`);
   }
 });
 
-/*Get all translates listings based on Languages*/
-router.post("/getbylanguages", async (req, res) => {
+/*Get all translates listings based on fromLanguages*/
+router.post("/getbyfromlanguages", async (req, res) => {
   const { languages } = req.body;
   try {
-    let translate = await getByLanguage(languages);
+    let translate = await getByLanguage(fromLanguage);
     res.send(translate);
   } catch (error) {
     debug(error.message);
-    res.status(500).send(`failed to find transport info by languages`);
+    res.status(500).send(`failed to find translate info by languages`);
+  }
+});
+
+/*Get translates listings based on toLanguage Languages*/
+router.post("/getbytolanguages", async (req, res) => {
+  const { languages } = req.body;
+  try {
+    let translate = await getByLanguage(toLanguage);
+    res.send(translate);
+  } catch (error) {
+    debug(error.message);
+    res.status(500).send(`failed to find translate info by languages`);
   }
 });
 
@@ -104,7 +156,7 @@ router.put("/delete", async (req, res) => {
     debug(error);
     res
       .status(500)
-      .send(`Failed to delete transport info by email and startTime`);
+      .send(`Failed to delete translate info by email and startTime`);
   }
 });
 
@@ -117,9 +169,24 @@ router.put("/update/", async (req, res) => {
       res.send(updatedInfo);
     }
   } catch (err) {
-    debug(`failed to edit transport with email: ${email}`);
+    debug(`failed to edit translate with email: ${email}`);
     debug(err.message);
     res.status(500).send(`account of ${email} cannot be updated`);
+  }
+});
+
+/**Delete translates info based on email and Time */
+
+router.put("/delete", async (req, res) => {
+  const { email, startTime } = req.body;
+  try {
+    let deletedSlot = deleteTranslatesByEmailAndTime(email, startTime);
+    res.status(200).send(deletedSlot);
+  } catch (error) {
+    debug(error);
+    res
+      .status(500)
+      .send(`Failed to delete translate info by email and startTime`);
   }
 });
 

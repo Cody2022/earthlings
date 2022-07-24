@@ -1,6 +1,9 @@
 const mongoose = require("mongoose");
 
+//This
 const translateSchema = new mongoose.Schema({
+    task: { type: String },
+    name: { type: String },
     email: { type: String, required: true },
     date: { type: Date },
     startTime: { type: Date },
@@ -11,6 +14,6 @@ const translateSchema = new mongoose.Schema({
     { timestamp: true }
   );
 
-const translateModel = mongoose.model("translatesSlots", translateSchema)
+const translateModel = mongoose.model("translates", translateSchema)
 
 module.exports = translateModel;
