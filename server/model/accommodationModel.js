@@ -56,10 +56,29 @@ const deleteListingById = async (id) => {
   return deletedListing;
 };
 
+const getByNumberOfRooms = async (number) => {
+  const numOfRoomsList = await Accommodation.find({
+    numberOfRooms:{
+      $gte: number
+    }
+  });
+  return numOfRoomsList;
+};
+const getByMaxNumTenants = async (number) => {
+  const maxNumTenantsList = await Accommodation.find({
+    maxNumTenants:{
+      $gte: number
+    }
+  });
+  return maxNumTenantsList;
+};
+
 module.exports = {
   createAccomListing,
   updateByEmail,
   findByEmail,
   getAllListings,
   deleteListingById,
+  getByNumberOfRooms,
+  getByMaxNumTenants,
 };

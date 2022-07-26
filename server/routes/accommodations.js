@@ -7,6 +7,8 @@ const {
   findByEmail,
   getAllListings,
   deleteListingById,
+  getByNumberOfRooms,
+  getByMaxNumTenants,
 } = require("../model/accommodationModel");
 
 // POST a new Accommodation Listing
@@ -68,6 +70,30 @@ router.put("/delete/:id", async (req, res) => {
   let id = req.params.id;
   let deletedListing = deleteListingById(id);
   res.send(deletedListing);
+});
+
+// Filter accommodationList by Number of Rooms
+router.post("/getbynumberofrooms", async (req, res) => {
+  const {numberOfRooms} = req.body;
+    try {
+    const numOfRoomsList = await getByNumberOfRooms(numberOfRooms);
+    res.send(numOfRoomsList);
+  } catch (error) {
+    debug(`error.message`);
+    res.status(500).send("Failed to find accommodation info by numberofrooms.");
+  }
+});
+
+// Filter accommodationList by Maximum Number of Tenants
+router.post("/getbymaxnumtenants", async (req, res) => {
+  const {maxNumTenants} = req.body;
+    try {
+    const maxNumTenantsList = await getByMaxNumTenants(maxNumTenants);
+    res.send(maxNumTenantsList);
+  } catch (error) {
+    debug(`error.message`);
+    res.status(500).send("Failed to find accommodation info by maxNumTenants.");
+  }
 });
 
 module.exports = router;
