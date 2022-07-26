@@ -4,7 +4,7 @@ const userModel = require("../model/userModel");
 const { Transport } = require("../model/transportModel");
 const Translate = require("../model/translateModel");
 const Accommodation = require("../model/accommodationModel");
-const Schedule = require("../model/scheduleModel");
+const {Schedule, createSchedule, findByEmail} = require("../model/scheduleModel");
 
 //This
 router.route("/").post(async (req, res) => {
@@ -19,7 +19,6 @@ router.route("/").post(async (req, res) => {
     if (!user) {
       return res.sendStatus(400);
     }
-
     const newEvent = new Schedule({
       task,
       email,
@@ -27,11 +26,38 @@ router.route("/").post(async (req, res) => {
       endDate,
     });
     newEvent.save();
-    res.send(newEvent);
+    // res.send(newEvent);
   } catch (e) {
     console.error(e);
     res.status(500).send(`failed to create schedule`);
     // throw e;
+  }
+});
+
+/** create translate calendar */
+router.post("/create", async (req, res) => {
+  try {
+    const translateInfo = req.body;
+    const task = new Date(translateInfo.date);
+    const startDate = new Date(translateInfo.startTime);
+    const endDate = new Date(translateInfo.endTime);
+    const userEmail = await userModel.findByEmail(email);
+    if (!user) {
+      return res.sendStatus(400);
+    }
+    const newTranslate = new createSchedule({
+      task,
+      userEmail,
+      startDate,
+      endDate,
+    });
+    if (newTranslate) {
+      res.send(newTranslate);
+    }
+  } catch (err) {
+    debug(`failed to create new translate`);
+    debug(err.message);
+    res.status(500).send(`failed to create new translate`);
   }
 });
 
