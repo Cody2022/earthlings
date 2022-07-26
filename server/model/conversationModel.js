@@ -15,10 +15,16 @@ const createMembers = async (members) => {
 };
 
 //Find a members conversations by id
-const findConversation = async (_id) => {
-    const getConversation = await conversationModel.find({ members: { $in: _id } });
-    return getConversation
+const findConversationById = async (_id) => {
+    const getConversationById = await conversationModel.find({ members: { $in: _id } });
+    return getConversationById
 }
 
-module.exports = { createMembers, findConversation }
+const findConversation = async (searchParams) => {
+        const getConversation = await conversationModel.findOne(searchParams);
+        return getConversation;
+}
+
+
+module.exports = { createMembers, findConversationById, findConversation }
 

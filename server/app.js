@@ -14,6 +14,7 @@ const messagesRoute = require("./routes/messages");
 const translateRoute = require("./routes/translateRoute");
 const scheduleRoute = require("./routes/scheduleRoute");
 const accommodationRoute = require("./routes/accommodations");
+const bookingRoutes = require("./routes/bookingRoutes");
 
 const app = express();
 // const server = http.createServer(app);
@@ -43,6 +44,7 @@ app.use("/messages", messagesRoute);
 app.use("/translate", translateRoute);
 app.use("/schedule", scheduleRoute);
 app.use("/accommodation", accommodationRoute);
+app.use("/bookings", bookingRoutes);
 app.use("/image", profilePicture)
 
 // catch 404 and forward to error handler

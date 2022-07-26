@@ -2,6 +2,7 @@ const express = require("express");
 const router = express.Router();
 const calendarModel = require("../model/caledarModel");
 
+//This
 router.route("/").post((req, res) => {
   try {
     const task = req.body.title;
@@ -10,6 +11,7 @@ router.route("/").post((req, res) => {
     const startTime = new Date(req.body.startDate);
     const endTime = new Date(req.body.endDate);
 
+   
     const newEvent = new calendarModel({
       task,
       selectDate,
@@ -18,9 +20,10 @@ router.route("/").post((req, res) => {
     });
 
     newEvent.save();
+    res.send(newEvent);
   } catch (e) {
     console.error(e);
-    throw e;
+    res.status(500).send(`failed to create calendar`);
   }
 });
 
