@@ -41,7 +41,6 @@ router.get("/:email", async (req, res) => {
   const bookings = await bookingModel.find({
     $or: [{ volunteerEmail: email }, { newcomerEmail: email }],
   });
-  console.log('bookings', bookings)
   res.json({ bookings });
 });
 
@@ -82,7 +81,6 @@ router.get("/listings", async (req, res) => {
 
 // Delete a listing By ID
 router.put("/delete/:id", async (req, res) => {
-  console.log("reached endpoint")
   let id = req.params.id;
   let deletedListing = deleteListingById(id);
   res.send(deletedListing);

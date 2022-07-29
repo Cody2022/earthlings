@@ -51,11 +51,11 @@ const main = async () => {
   const result = await Transport.find({});
   let finalResult = [];
   for (let i = 0; i < result.length; i++) {
-    console.log(result[i].email);
+    // console.log(result[i].email);
     const userResult = await User.findOne({
       email: result[i].email,
     });
-    console.log(userResult);
+    // console.log(userResult);
     finalResult.push({
       ...result[i].toObject(),
       user: userResult,

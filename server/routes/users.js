@@ -53,7 +53,7 @@ router.get("/get/:email", async(req, res)=>{
 
 //Get users firstName by querying out 
 router.get("/name", async (req, res) => {
-  console.log(req.query);
+  // console.log(req.query);
   const firstName = req.query.email;
   try {
     const findUserName = await findUsersFirstName(firstName);

@@ -12,7 +12,7 @@ router.post("/", async (req, res) => {
         } else {
             try {
                 const addedMembers = await createMembers(newMembers);
-                console.log(`Adding members to conversation with id of: ${addedMembers}`);
+                // console.log(`Adding members to conversation with id of: ${addedMembers}`);
                 res.json(newMembers);
             } catch (err) {
                 res.status(500).json(err.message);
@@ -28,7 +28,7 @@ router.get("/:senderEmail", async (req, res) => {
     const id = req.params.senderEmail;
     try {
         const getConversation = await findConversationById(id);
-        console.log(`Retrived conversation with id of: ${id}`);
+        // console.log(`Retrived conversation with id of: ${id}`);
         res.send(getConversation);
     } catch (err) {
         res.status(500).send(err.message);

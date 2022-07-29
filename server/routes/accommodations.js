@@ -15,11 +15,8 @@ const {
 router.post("/create", async (req, res) => {
   // newAccomListing= {startDate, endDate, numberOfRooms, maxNumTenants, location, allowPets, accommodationType, accessibleHome}
   const newAccomListing = req.body;
-  console.log("new accomm listing is", newAccomListing);
-  // debug(`Post a new accommodation listing: ${newAccomListing}`)
   try {
     const createdListing = await createAccomListing(newAccomListing);
-    console.log(`Creating listing with id of: ${createdListing}`);
     res.send(createdListing);
   } catch (err) {
     debug(`failed to add accomodation listing: ${newAccomListing}`);
@@ -66,7 +63,6 @@ router.get("/listings", async (req, res) => {
 
 // Delete a listing By ID
 router.put("/delete/:id", async (req, res) => {
-  console.log("reached endpoint")
   let id = req.params.id;
   let deletedListing = deleteListingById(id);
   res.send(deletedListing);

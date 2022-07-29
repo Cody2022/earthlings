@@ -11,7 +11,7 @@ router.route("/").post(async (req, res) => {
   try {
     const task = req.body.task;
     const email = req.body.email;
-    console.log("schedule !!!", req.body);
+    // console.log("schedule !!!", req.body);
     const startDate = new Date(req.body.startDate);
     const endDate = new Date(req.body.endDate);
 
@@ -85,7 +85,7 @@ router.get("/overlaps", async (req, res) => {
       })),
     };
     const transports = await Transport.find(query);
-    console.log(JSON.stringify(query, undefined, 2));
+    // console.log(JSON.stringify(query, undefined, 2));
     return res.json({ overlaps: transports });
   }
 
@@ -146,7 +146,7 @@ router.get("/listings", async (req, res) => {
 
 // Delete a listing By ID
 router.put("/delete/:id", async (req, res) => {
-  console.log("reached endpoint")
+  // console.log("reached endpoint")
   let id = req.params.id;
   let deletedListing = deleteListingById(id);
   res.send(deletedListing);
