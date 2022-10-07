@@ -28,7 +28,6 @@ const io = require("socket.io")(server, {
 });
 
 let users = [];
-
 //Add user to array
 const addUser = (userId, socketId) => {
   !users.some((user) => user.userId === userId) &&
@@ -58,17 +57,18 @@ io.on("connection", (socket) => {
   socket.on("sendMessage", ({ senderId, receiverId, message }) => {
     const user = getUser(receiverId);
     //send message to one client with socketID
-    if (!user) {
+    // if (!user) {
       io.emit("getMessage", {
         senderId,
         message,
       })
-    } else {
-      io.to(user.socketId).emit("getMessage", {
+    // } else {
+      io.to(socket.id).emit("getMessage", {
         senderId,
         message,
       });
-    }
+    console.log('Sent message to ', socket.id)
+    // }
   });
 
   //When disconnect
